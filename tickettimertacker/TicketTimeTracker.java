@@ -93,7 +93,7 @@ public class TicketTimeTracker extends javax.swing.JFrame {
     }
     
     void addTicketMenuItems(String ticketName) throws IOException {
-        ImageIcon icon = new ImageIcon(ImageIO.read(TicketTimeTracker.class.getResourceAsStream("/Icons/standardTicket.png")));
+        ImageIcon icon = new ImageIcon(ImageIO.read(TicketTimeTracker.class.getResourceAsStream("/Icons/ticket16.png")));
         JMenuItem loadedTicket = new JMenuItem(ticketName, icon);
         loadedTicket.addActionListener((ActionEvent ae) -> {
             totalTimeLabel.setText("Total time: " + prop.getProperty(ticketName+"_time"));
@@ -189,6 +189,7 @@ public class TicketTimeTracker extends javax.swing.JFrame {
         FolderMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setIconImages(null);
         setMinimumSize(new java.awt.Dimension(205, 101));
         setResizable(false);
 
@@ -480,6 +481,15 @@ public class TicketTimeTracker extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
             mainFrame = new TicketTimeTracker();
+            try {
+                ImageIcon icon16 = new ImageIcon(ImageIO.read(TicketTimeTracker.class.getResourceAsStream("/Icons/ticket16.png")));
+               
+                
+                //mainFrame.setIconImages(imageList);
+            } catch (IOException ex) {
+                Logger.getLogger(TicketTimeTracker.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
             mainFrame.setVisible(true);
             mainFrame.setAlwaysOnTop(true);
         });
