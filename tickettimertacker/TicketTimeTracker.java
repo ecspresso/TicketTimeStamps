@@ -2,6 +2,7 @@ package tickettimertacker;
 
 import java.awt.Color;
 import java.awt.Desktop;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,6 +14,8 @@ import java.nio.file.StandardOpenOption;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -482,10 +485,18 @@ public class TicketTimeTracker extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(() -> {
             mainFrame = new TicketTimeTracker();
             try {
-                ImageIcon icon16 = new ImageIcon(ImageIO.read(TicketTimeTracker.class.getResourceAsStream("/Icons/ticket16.png")));
-               
+                List<Image> icons = new ArrayList<>();
+                icons.add(ImageIO.read(TicketTimeTracker.class.getResourceAsStream("/Icons/stoppur16.png")));
+                icons.add(ImageIO.read(TicketTimeTracker.class.getResourceAsStream("/Icons/stoppur24.png")));
+                icons.add(ImageIO.read(TicketTimeTracker.class.getResourceAsStream("/Icons/stoppur32.png")));
+                icons.add(ImageIO.read(TicketTimeTracker.class.getResourceAsStream("/Icons/stoppur48.png")));
+                icons.add(ImageIO.read(TicketTimeTracker.class.getResourceAsStream("/Icons/stoppur64.png")));
+                icons.add(ImageIO.read(TicketTimeTracker.class.getResourceAsStream("/Icons/stoppur96.png")));
+                icons.add(ImageIO.read(TicketTimeTracker.class.getResourceAsStream("/Icons/stoppur128.png")));
+                icons.add(ImageIO.read(TicketTimeTracker.class.getResourceAsStream("/Icons/stoppur256.png")));
+                icons.add(ImageIO.read(TicketTimeTracker.class.getResourceAsStream("/Icons/stoppur512.png")));
                 
-                //mainFrame.setIconImages(imageList);
+                mainFrame.setIconImages(icons);
             } catch (IOException ex) {
                 Logger.getLogger(TicketTimeTracker.class.getName()).log(Level.SEVERE, null, ex);
             }
