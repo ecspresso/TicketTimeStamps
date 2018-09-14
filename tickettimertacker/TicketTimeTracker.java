@@ -41,6 +41,7 @@ public class TicketTimeTracker extends javax.swing.JFrame {
     public TicketTimeTracker() {
         initComponents();
         try {
+            // Catch-em-all code try-catch for code to run at launch
             startUpCode();
         } catch (IOException ex) {
             Logger.getLogger(TicketTimeTracker.class.getName()).log(Level.SEVERE, null, ex);
@@ -50,13 +51,15 @@ public class TicketTimeTracker extends javax.swing.JFrame {
     
     private void startUpCode() throws FileNotFoundException, IOException {
         // Startup code
-        stopped = new ImageIcon(ImageIO.read(TicketTimeTracker.class.getResourceAsStream("/Icons/stopped.png")));
-        started = new ImageIcon(ImageIO.read(TicketTimeTracker.class.getResourceAsStream("/Icons/started.png")));
+        stopped = new ImageIcon(ImageIO.read(TicketTimeTracker.class.getResourceAsStream("/Icons/stoppur_stopped32x32.png")));
+        started = new ImageIcon(ImageIO.read(TicketTimeTracker.class.getResourceAsStream("/Icons/stoppur32x32.png")));
         
+        // Create folder if it does not exist
         if(!PROPERTIES_DIR.exists()) {
             PROPERTIES_DIR.mkdir();
         }
         
+        // Create file if it does not exist
         if(!PROPERTIES_FILE.exists()) {
             PROPERTIES_FILE.createNewFile();
             prop.setProperty("path", PROPERTIES_DIR.getPath());
@@ -65,10 +68,11 @@ public class TicketTimeTracker extends javax.swing.JFrame {
             prop.store(new FileOutputStream(PROPERTIES_FILE), null);
         } else {
             prop.load(new FileInputStream(PROPERTIES_FILE));
-            
         }
         
+        // Properties file
         timeStampFile = new File(prop.getProperty("path") + File.separator + "TimeStamps.txt");
+        // Create file if it does note exists
         if(!timeStampFile.exists()) {
             timeStampFile.createNewFile();
         }
@@ -78,7 +82,7 @@ public class TicketTimeTracker extends javax.swing.JFrame {
             String ticketName = prop.getProperty("activeTicket");
             activeTicket.setText(ticketName);
             
-            // get active text and see if it is a ticket
+            // Get active text and see if it is a ticket
             if(prop.getProperty(activeTicket.getText()) != null) {
                 totalTimeLabel.setText("Total time: " + prop.getProperty(activeTicket.getText() + "_time") + " min");
             }
@@ -96,18 +100,21 @@ public class TicketTimeTracker extends javax.swing.JFrame {
     }
     
     void addTicketMenuItems(String ticketName) throws IOException {
-        ImageIcon icon = new ImageIcon(ImageIO.read(TicketTimeTracker.class.getResourceAsStream("/Icons/ticket16.png")));
-        JMenuItem loadedTicket = new JMenuItem(ticketName, icon);
+        // Create loadTicket items with icon
+        JMenuItem loadedTicket = new JMenuItem(ticketName, new ImageIcon(ImageIO.read(TicketTimeTracker.class.getResourceAsStream("/Icons/loadticket.png"))));
+        // Load clicked ticket
         loadedTicket.addActionListener((ActionEvent ae) -> {
             totalTimeLabel.setText("Total time: " + prop.getProperty(ticketName+"_time"));
             activeTicket.setText(ticketName);
             prop.setProperty("activeTicket", ticketName);
             updateProperties();
         });
-
+        
         LoadTicketMenu.add(loadedTicket);
-
-        JMenuItem removeTicket = new JMenuItem(ticketName, icon);
+        
+        // Create removeTicket items with icon
+        JMenuItem removeTicket = new JMenuItem(ticketName, new ImageIcon(ImageIO.read(TicketTimeTracker.class.getResourceAsStream("/Icons/ticket.png"))));
+        // Remove clicked ticket
         removeTicket.addActionListener((ActionEvent ae) -> {
             // Get total ticket count
             int totalTicketCount = Integer.parseInt(prop.getProperty("ticketCount"));
@@ -145,15 +152,19 @@ public class TicketTimeTracker extends javax.swing.JFrame {
                 prop.remove("ticket" + totalTicketCount);
             }
             
+            // Update properties file
             updateProperties();
             
+            // Remove ticket from sub menus
             RemoveTicketMenu.remove(removeTicket);
             LoadTicketMenu.remove(loadedTicket);
+            // End action event
         });
-
+        
         RemoveTicketMenu.add(removeTicket);
     }
     
+    // Update properties file on computer
     static void updateProperties(){
         try {
             prop.store(new FileOutputStream(PROPERTIES_FILE), null);
@@ -215,7 +226,7 @@ public class TicketTimeTracker extends javax.swing.JFrame {
         totalTimeLabel.setText("Total time:");
 
         labelLED.setForeground(new java.awt.Color(240, 240, 240));
-        labelLED.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/stopped.png"))); // NOI18N
+        labelLED.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/stoppur_stopped32x32.png"))); // NOI18N
 
         javax.swing.GroupLayout panelLayout = new javax.swing.GroupLayout(panel);
         panel.setLayout(panelLayout);
@@ -234,7 +245,7 @@ public class TicketTimeTracker extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(endButton, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(totalTimeLabel))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
                         .addComponent(labelLED)))
                 .addContainerGap())
         );
@@ -257,7 +268,7 @@ public class TicketTimeTracker extends javax.swing.JFrame {
         FileMenu.setText("File");
         FileMenu.setToolTipText("");
 
-        ExitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.ALT_MASK));
+        ExitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.ALT_DOWN_MASK));
         ExitMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/exit.png"))); // NOI18N
         ExitMenuItem.setText("Exit");
         ExitMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -279,8 +290,9 @@ public class TicketTimeTracker extends javax.swing.JFrame {
         jMenuBar1.add(FileMenu);
 
         TicketMainMenu.setText("Tickets");
+        TicketMainMenu.setToolTipText("");
 
-        NewTicketMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.SHIFT_MASK));
+        NewTicketMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.SHIFT_DOWN_MASK));
         NewTicketMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/newticket.png"))); // NOI18N
         NewTicketMenuItem.setText("New Ticket");
         NewTicketMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -400,15 +412,15 @@ public class TicketTimeTracker extends javax.swing.JFrame {
 
                 // Duration
                 long duration = Duration.between(startTime, endTime).toMinutes();
-                if(prop.getProperty(activeTicket.getText()) != null) {
-                    duration += Long.parseLong(prop.getProperty(activeTicket.getText()));
+                if(prop.getProperty(activeTicket.getText() + "_time") != null) {
+                    duration += Long.parseLong(prop.getProperty(activeTicket.getText() + "_time"));
                 }
 
                 String durationStr = String.valueOf(duration);
                 strBytes = durationStr.getBytes();
                 Files.write(timeStampFile.toPath(), strBytes, StandardOpenOption.APPEND);
 
-                prop.setProperty(activeTicket.getText(), durationStr);
+                prop.setProperty(activeTicket.getText() + "_time", durationStr);
                 updateProperties();
 
                 totalTimeLabel.setText("Total time: " + durationStr + " min");
@@ -486,15 +498,16 @@ public class TicketTimeTracker extends javax.swing.JFrame {
             mainFrame = new TicketTimeTracker();
             try {
                 List<Image> icons = new ArrayList<>();
-                icons.add(ImageIO.read(TicketTimeTracker.class.getResourceAsStream("/Icons/stoppur16.png")));
-                icons.add(ImageIO.read(TicketTimeTracker.class.getResourceAsStream("/Icons/stoppur24.png")));
-                icons.add(ImageIO.read(TicketTimeTracker.class.getResourceAsStream("/Icons/stoppur32.png")));
-                icons.add(ImageIO.read(TicketTimeTracker.class.getResourceAsStream("/Icons/stoppur48.png")));
-                icons.add(ImageIO.read(TicketTimeTracker.class.getResourceAsStream("/Icons/stoppur64.png")));
-                icons.add(ImageIO.read(TicketTimeTracker.class.getResourceAsStream("/Icons/stoppur96.png")));
-                icons.add(ImageIO.read(TicketTimeTracker.class.getResourceAsStream("/Icons/stoppur128.png")));
-                icons.add(ImageIO.read(TicketTimeTracker.class.getResourceAsStream("/Icons/stoppur256.png")));
-                icons.add(ImageIO.read(TicketTimeTracker.class.getResourceAsStream("/Icons/stoppur512.png")));
+                icons.add(ImageIO.read(TicketTimeTracker.class.getResourceAsStream("/Icons/stoppur16x16.png")));
+                icons.add(ImageIO.read(TicketTimeTracker.class.getResourceAsStream("/Icons/stoppur24x24.png")));
+                icons.add(ImageIO.read(TicketTimeTracker.class.getResourceAsStream("/Icons/stoppur32x32.png")));
+                icons.add(ImageIO.read(TicketTimeTracker.class.getResourceAsStream("/Icons/stoppur48x48.png")));
+                icons.add(ImageIO.read(TicketTimeTracker.class.getResourceAsStream("/Icons/stoppur64x64.png")));
+                icons.add(ImageIO.read(TicketTimeTracker.class.getResourceAsStream("/Icons/stoppur96x96.png")));
+                icons.add(ImageIO.read(TicketTimeTracker.class.getResourceAsStream("/Icons/stoppur128x128.png")));
+                icons.add(ImageIO.read(TicketTimeTracker.class.getResourceAsStream("/Icons/stoppur256x256.png")));
+                icons.add(ImageIO.read(TicketTimeTracker.class.getResourceAsStream("/Icons/stoppur512x512.png")));
+                icons.add(ImageIO.read(TicketTimeTracker.class.getResourceAsStream("/Icons/stoppur1024x1024.png")));
                 
                 mainFrame.setIconImages(icons);
             } catch (IOException ex) {
